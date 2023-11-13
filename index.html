@@ -1,0 +1,21 @@
+CREATE PROCEDURE gerar_relatorio_vendas_diarias
+AS
+BEGIN
+    -- Obtém a data atual
+    DECLARE @data_atual DATETIME;
+    SET @data_atual = GETDATE();
+
+    -- Seleciona a quantidade de produtos comprados por dia
+    SELECT
+        produto.nome AS produto,
+        SUM(quantidade) AS quantidade_vendida
+    FROM
+        vendas
+    INNER JOIN
+        produtos
+        ON vendas.id_produto = produtos.id_produto
+    WHERE
+        vendas.data_venda = @data_atual
+    GROUP BY
+        produto.nome;
+END;
